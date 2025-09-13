@@ -154,13 +154,15 @@ Contains transaction details (amount, timestamp, merchant, device type, customer
 9. **Installation**
 
    * Clone repo.
+    ```bash
+    git clone https://github.com/M-INDN-SEDTA/Data-Science-Projects/tree/main/Financial_Transactions_Fraud_Detection
+    ```
+
    * Install dependencies:
 
      ```bash
      pip install -r requirements.txt
      ```
-
-Got it. Here’s a refined version of **section 10 – Visualization** for your README based on your instructions:
 
 ---
 
