@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Fraud Detection</title>
+<style>
+    /* General body styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background: #111; /* dark background */
+    margin: 0;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+/* Main container */
+.container {
+    max-width: 1000px;
+    width: 95%;
+    background: #1a1a1a;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    box-sizing: border-box;
+    color: #f0f0f0;
+}
+
+/* Heading */
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: #fff;
+}
+
+/* Example buttons */
+.examples {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.examples button {
+    background: #0072C6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 18px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.examples button:hover {
+    background: #005A9E;
+    transform: translateY(-2px);
+}
+
+/* Form layout */
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+/* Form group styling */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    width: 22%;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.form-group input[type="number"],
+.form-group select {
+    padding: 12px 14px;
+    font-size: 14px;
+    border: 2px solid #333;
+    border-radius: 6px;
+    background: #222;
+    color: #fff;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+.form-group input[type="number"]:focus,
+.form-group select:focus {
+    border-color: #28A745;
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.5);
+    outline: none;
+}
+
+/* Checkbox styling */
+.form-group input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transform: scale(1.5);
+    margin-right: 10px;
+}
+
+.form-group label span {
+    font-size: 16px;
+}
+
+/* Form action buttons */
+.form-actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.form-actions button {
+    background: #28A745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.form-actions button:hover {
+    background: #218838;
+    transform: translateY(-2px);
+}
+
+/* Result display */
+#result {
+    margin-top: 25px;
+    padding: 18px;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 6px;
+    min-height: 60px;
+    transition: background 0.3s, color 0.3s;
+}
+
+#result.fraud {
+    background: #660000;
+    color: #ffcccc;
+}
+
+#result.nonfraud {
+    background: #004d00;
+    color: #ccffcc;
+}
+
+/* Responsive adjustments for smaller screens */
+@media(max-width: 900px) {
+    .form-group {
+        width: 100%;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Fraud Detection Form</h1>
+
+    <div class="examples">
+        <button type="button" onclick="fillExample('fraud1')">Fraud Example 1</button>
+        <button type="button" onclick="fillExample('fraud2')">Fraud Example 2</button>
+        <button type="button" onclick="fillExample('nonfraud1')">Non-Fraud 1</button>
+        <button type="button" onclick="fillExample('nonfraud2')">Non-Fraud 2</button>
+        <button type="button" onclick="clearForm()">Clear</button>
+    </div>
+
+    <form id="fraudForm">
+    <div class="form-group">
+        <label>Amount in $ (dollars):</label>
+        <input type="number" step="0.01" name="amount">
+    </div>
+
+    <div class="form-group">
+        <label>Customer Age:</label>
+        <input type="number" name="customer_age">
+    </div>
+
+    <div class="form-group">
+        <label>Merchant Category:</label>
+        <select name="merchant_category">
+            <option value="0">Fashion [0]</option>
+            <option value="1">Electronics [1]</option>
+            <option value="2">Grocery [2]</option>
+            <option value="3">Entertainment [3]</option>
+            <option value="4">Other [4]</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Customer Location:</label>
+        <select name="customer_location">
+            <option value="0">New York [0]</option>
+            <option value="1">Illinois [1]</option>
+            <option value="2">Texas [2]</option>
+            <option value="3">Florida [3]</option>
+            <option value="4">California [4]</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Device Type:</label>
+        <select name="device_type">
+            <option value="0">Desktop [0]</option>
+            <option value="1">Tablet [1]</option>
+            <option value="2">Mobile [2]</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Previous Transactions:</label>
+        <input type="number" name="previous_transactions">
+    </div>
+
+    <div class="form-group">
+        <label>Hour:</label>
+        <select name="hour">
+            <option value="0">12 AM [0]</option>
+            <option value="1">1 AM [1]</option>
+            <option value="2">2 AM [2]</option>
+            <option value="3">3 AM [3]</option>
+            <option value="4">4 AM [4]</option>
+            <option value="5">5 AM [5]</option>
+            <option value="6">6 AM [6]</option>
+            <option value="7">7 AM [7]</option>
+            <option value="8">8 AM [8]</option>
+            <option value="9">9 AM [9]</option>
+            <option value="10">10 AM [10]</option>
+            <option value="11">11 AM [11]</option>
+            <option value="12">12 PM [12]</option>
+            <option value="13">1 PM [13]</option>
+            <option value="14">2 PM [14]</option>
+            <option value="15">3 PM [15]</option>
+            <option value="16">4 PM [16]</option>
+            <option value="17">5 PM [17]</option>
+            <option value="18">6 PM [18]</option>
+            <option value="19">7 PM [19]</option>
+            <option value="20">8 PM [20]</option>
+            <option value="21">9 PM [21]</option>
+            <option value="22">10 PM [22]</option>
+            <option value="23">11 PM [23]</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Month:</label>
+        <select name="month">
+            <option value="1">January [1]</option>
+            <option value="2">February [2]</option>
+            <option value="3">March [3]</option>
+            <option value="4">April [4]</option>
+            <option value="5">May [5]</option>
+            <option value="6">June [6]</option>
+            <option value="7">July [7]</option>
+            <option value="8">August [8]</option>
+            <option value="9">September [9]</option>
+            <option value="10">October [10]</option>
+            <option value="11">November [11]</option>
+            <option value="12">December [12]</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Year:</label>
+        <input type="number" name="year">
+    </div>
+
+    <div class="form-group">
+        <label>Day of Week:</label>
+        <select name="day_of_week">
+            <option value="0">Sunday [0]</option>
+            <option value="1">Monday [1]</option>
+            <option value="2">Tuesday [2]</option>
+            <option value="3">Wednesday [3]</option>
+            <option value="4">Thursday [4]</option>
+            <option value="5">Friday [5]</option>
+            <option value="6">Saturday [6]</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Is Weekend:</label>
+        <input type="checkbox" name="is_weekend">
+    </div>
+
+    <div class="form-actions">
+        <button type="submit">Predict</button>
+    </div>
+</form>
+
+
+    <div id="result"></div>
+</div>
+
+<script>
+const examples = {
+    fraud1: {amount: 328.20, customer_age: 56, merchant_category: 3, customer_location: 2, device_type: 1, previous_transactions: 6, hour: 22, month: 2, year: 2022, day_of_week: 2, is_weekend: false},
+    fraud2: {amount: 119.08, customer_age: 30, merchant_category: 1, customer_location: 4, device_type: 2, previous_transactions: 2, hour: 11, month: 5, year: 2023, day_of_week: 3, is_weekend: false},
+    nonfraud1: {amount:50.25,customer_age:35,merchant_category:3,customer_location:0,device_type:1,previous_transactions:1,hour:10,month:7,year:2024,day_of_week:1,is_weekend:false},
+    nonfraud2: {amount:100,customer_age:28,merchant_category:4,customer_location:3,device_type:0,previous_transactions:2,hour:15,month:6,year:2023,day_of_week:5,is_weekend:true}
+};
+
+function fillExample(type) {
+    const data = examples[type];
+    for (const key in data) {
+        const el = document.querySelector(`[name=${key}]`);
+        if(el.type==="checkbox") el.checked=data[key];
+        else el.value=data[key];
+    }
+    document.getElementById("result").innerText="";
+}
+
+function clearForm() {
+    document.getElementById("fraudForm").reset();
+    document.getElementById("result").innerText="";
+}
+
+const form=document.getElementById('fraudForm');
+form.onsubmit=async e=>{
+    e.preventDefault();
+    const formData=new FormData(form);
+    const data=Object.fromEntries(formData.entries());
+
+    data.amount=parseFloat(data.amount);
+    data.customer_age=parseInt(data.customer_age);
+    data.merchant_category=parseInt(data.merchant_category);
+    data.customer_location=parseInt(data.customer_location);
+    data.device_type=parseInt(data.device_type);
+    data.previous_transactions=parseInt(data.previous_transactions);
+    data.hour=parseInt(data.hour);
+    data.month=parseInt(data.month);
+    data.year=parseInt(data.year);
+    data.day_of_week=parseInt(data.day_of_week);
+    data.is_weekend=data.is_weekend==="on";
+
+    const response=await fetch("/predict_fraud/",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(data)
+    });
+
+    const result=await response.json();
+    const resDiv=document.getElementById("result");
+    resDiv.innerText=`Prediction: ${result.is_fraud===1?"FRAUD":"NON-FRAUD"}\nProbability: ${result.fraud_probability}`;
+    resDiv.className=result.is_fraud===1?"fraud":"nonfraud";
+}
+</script>
+</body>
+</html>
