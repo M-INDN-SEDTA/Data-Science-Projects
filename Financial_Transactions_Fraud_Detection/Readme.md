@@ -1,4 +1,4 @@
-### 1. **Project Title & Short Description**
+### 1. **Project Title & Description**
 
 * **Name:** `Financial_Transaction_Fraud_Detection`
 * **Type:** Data Science / Machine Learning Project
@@ -19,7 +19,7 @@
 2. **Project Structure (Tree View)**
 
    * Folder hierarchy 
-     ```
+     ```bash
     📂 Financial_Transaction_Fraud_Detection
     ├── datasets/                               # Raw and processed datasets
     │   ├── financial_fraud_dataset.csv         # Actual dataset to import for Analysis  
