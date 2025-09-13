@@ -15,37 +15,33 @@
   * Summarizes analysis and insights in **PDF and presentation formats** for stakeholders.
 
 ---
+### 2. Project Structure (Tree View)
 
-2. **Project Structure (Tree View)**
-
-   * Folder hierarchy 
-     ```bash
-    📂 Financial_Transaction_Fraud_Detection
-    ├── datasets/                               # Raw and processed datasets
-    │   ├── financial_fraud_dataset.csv         # Actual dataset to import for Analysis  
-    │   └── fraud_transactions_for_sql.csv      # Dataset to load CSV into SQL Databse
-    │
-    ├── fraud_transactions_detection_app/       # FastAPI web app
-    │   ├── templates/                          # Frontend HTML (Jinja2 templates)
-    │   │   └── index.html
-    │   ├── __pycache__/                        # Auto-generated Python cache
-    │   ├── fraud_model.pkl                     # Local copy of trained model
-    │   ├── main.py                             # FastAPI app (run with uvicorn)
-    │   └── requirements.txt                    # Dependencies for app
-    │
-    ├── models/                                 # Stored trained ML models
-    │   └── fraud_model.pkl
-    │
-    ├── Financial Fraud Detection.pbix          # Power BI dashboard
-    ├── Financial Fraud Detection.pdf           # Project report (PDF)
-    ├── Financial Fraud Detection.pptx          # Presentation slides
-    │
-    ├── Financial Fraud Transaction Query.sql   # SQL queries for fraud data
-    ├── fraud_analysis_and_model.ipynb          # Jupyter Notebook (EDA + ML)
-    ├── fraud_analysis_and_model.py             # Python script version
-    ├── load_fraud_csv_to_sql.py                # Script to load CSV into SQL
-    └── requirements.txt                        # Root dependencies
-     ```
+📂 Financial_Transaction_Fraud_Detection
+├── datasets/                               # Raw and processed datasets
+│   ├── financial_fraud_dataset.csv         # Dataset for analysis
+│   └── fraud_transactions_for_sql.csv      # CSV for SQL import
+│
+├── fraud_transactions_detection_app/       # FastAPI web app
+│   ├── templates/                          # Frontend HTML (Jinja2)
+│   │   └── index.html
+│   ├── __pycache__/                        # Python cache
+│   ├── fraud_model.pkl                     # Local trained model
+│   ├── main.py                             # FastAPI app (run with uvicorn)
+│   └── requirements.txt                    # App dependencies
+│
+├── models/                                 # Trained ML models
+│   └── fraud_model.pkl
+│
+├── Financial Fraud Detection.pbix          # Power BI dashboard
+├── Financial Fraud Detection.pdf           # Project report (PDF)
+├── Financial Fraud Detection.pptx          # Presentation slides
+│
+├── Financial Fraud Transaction Query.sql   # SQL queries
+├── fraud_analysis_and_model.ipynb          # Jupyter Notebook (EDA + ML)
+├── fraud_analysis_and_model.py             # Python script version
+├── load_fraud_csv_to_sql.py                # Script to load CSV into SQL
+└── requirements.txt                        # Root dependencies
 
 ---
 
