@@ -15,6 +15,9 @@
   * Summarizes analysis and insights in **PDF and presentation formats** for stakeholders.
 
 ---
+
+
+```markdown
 ### 2. Project Structure (Tree View)
 
 📂 Financial_Transaction_Fraud_Detection
@@ -42,6 +45,8 @@
 ├── fraud_analysis_and_model.py             # Python script version
 ├── load_fraud_csv_to_sql.py                # Script to load CSV into SQL
 └── requirements.txt                        # Root dependencies
+```
+
 
 ---
 
