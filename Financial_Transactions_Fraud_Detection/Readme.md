@@ -16,9 +16,9 @@
 
 ---
 
+### 2. Project Structure (Tree View)
 
 ```markdown
-### 2. Project Structure (Tree View)
 
 📂 Financial_Transaction_Fraud_Detection
 ├── datasets/                               # Raw and processed datasets
