@@ -114,7 +114,7 @@ The goal of this project is to **predict traffic patterns** (volume, congestion,
 | `model2_congestion_level_independent.pkl` | Predict **Congestion Level** independently    | Same as Model 1                                                                                                                                                                                                                                                                                                                              |
 | `model3_average_speed_independent.pkl`    | Predict **Average Speed** independently       | Same as Model 1                                                                                                                                                                                                                                                                                                                              |
 | `model4_traffic_volume_with_features.pkl` | Predict **Traffic Volume** using all features | All features from Model 1 + `Congestion Level`, `Average Speed`                                                                                                                                                                                                                                                                              |
-                                                                                                                             |
+
 
 * **Target Variables / Predictions:**
 
