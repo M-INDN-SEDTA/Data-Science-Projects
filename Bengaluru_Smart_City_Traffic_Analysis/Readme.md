@@ -114,7 +114,7 @@ The goal of this project is to **predict traffic patterns** (volume, congestion,
 | `model2_congestion_level_independent.pkl` | Predict **Congestion Level** independently    | Same as Model 1                                                                                                                                                                                                                                                                                                                              |
 | `model3_average_speed_independent.pkl`    | Predict **Average Speed** independently       | Same as Model 1                                                                                                                                                                                                                                                                                                                              |
 | `model4_traffic_volume_with_features.pkl` | Predict **Traffic Volume** using all features | All features from Model 1 + `Congestion Level`, `Average Speed`                                                                                                                                                                                                                                                                              |
-                                                                                                                             |
+
 
 * **Target Variables / Predictions:**
 
@@ -143,6 +143,17 @@ The goal of this project is to **predict traffic patterns** (volume, congestion,
 
 ### 8. Flask App (Traffic Prediction Dashboard)
 
+Please run the following files to generate the `models` folder and save all the models inside it:
+
+```
+Bengaluru_Smart_City_Traffic_Analysis.ipynb
+Bengaluru_Smart_City_Traffic_Analysis.py
+```
+
+> **Important:** Without the `models` folder, the app will not run.
+> Some of the model files exceed GitHub's 100 MB file size limit.
+> You can alternatively download the models directly from Google Drive using this link: \[Link will be provided Shortly]
+
 * **Run the app**
 
 ```bash
@@ -168,7 +179,7 @@ python app.py
 * Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/Bengaluru_Smart_City_Traffic_Analysis.git
+git clone https://github.com/M-INDN-SEDTA/Data-Science-Projects/tree/main/Bengaluru_Smart_City_Traffic_Analysis
 ```
 
 * Install dependencies:
