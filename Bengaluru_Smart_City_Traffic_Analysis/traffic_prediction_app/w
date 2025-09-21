@@ -1,0 +1,5 @@
+
+cd C:\Y2Tutorials\DS\DA_DS_final_projects\Bengaluru_Smart_City_Traffic_Analysis\traffic_prediction_app
+python app.py
+
+pip install -r requirements.txt

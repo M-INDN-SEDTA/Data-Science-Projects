@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Traffic Prediction Dashboard</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background: #f9f9f9; color: #333; }
+        h1 { text-align: center; margin-bottom: 40px; color: #2c3e50; }
+        .container { width: 100%; max-width: 950px; margin: auto; background: #fff; border-radius: 12px; padding: 25px; margin-bottom: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h2 { margin-bottom: 20px; color: #34495e; }
+        .row { display: flex; align-items: center; margin-bottom: 12px; }
+        label { width: 260px; font-weight: 600; }
+        input, select { padding: 8px 10px; width: 200px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        .btn { margin: 5px; padding: 8px 16px; cursor: pointer; border: none; border-radius: 6px; font-weight: 600; transition: 0.2s; }
+        .predict-btn { background: #27ae60; color: #fff; }
+        .predict-btn:hover { background: #2ecc71; }
+        .clear-btn { background: #e74c3c; color: #fff; }
+        .clear-btn:hover { background: #ff6666; }
+        .example-btn { background: #3498db; color: #fff; }
+        .example-btn:hover { background: #5dade2; }
+        .result { margin-top: 20px; padding: 12px 15px; border-radius: 8px; background: #f1f8e9; font-weight: bold; font-size: 16px; color: #2e7d32; }
+        .result span.unit { font-weight: normal; color: #555; font-size: 14px; margin-left: 6px; }
+        @media (max-width: 600px){
+            .row { flex-direction: column; align-items: flex-start; }
+            label { width: 100%; margin-bottom: 5px; }
+            input, select { width: 100%; }
+        }
+
+        .containers-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.container {
+    flex: 0 0 48%;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.row label {
+    flex: 0 0 40%;
+    font-weight: 600;
+}
+
+.row input,
+.row select {
+    flex: 0 0 55%;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    max-width: 190px;
+}
+
+.btn {
+    margin: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.predict-btn { background: #27ae60; color: #fff; }
+.predict-btn:hover { background: #2ecc71; }
+.clear-btn { background: #e74c3c; color: #fff; }
+.clear-btn:hover { background: #ff6666; }
+.example-btn { background: #3498db; color: #fff; }
+.example-btn:hover { background: #5dade2; }
+
+.result {
+    margin-top: 20px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    background: #f1f8e9;
+    font-weight: bold;
+    font-size: 16px;
+    color: #2e7d32;
+}
+
+.result span.unit {
+    font-weight: normal;
+    color: #555;
+    font-size: 14px;
+    margin-left: 6px;
+}
+
+@media (max-width: 880px) {
+    .container { flex: 0 0 100%; }
+    .row { flex-direction: column; }
+    .row label,
+    .row input,
+    .row select { flex: 0 0 100%; width: 100%; }
+
+    .row input, .row select { max-width:92%;}
+}
+       
+footer {
+    text-align: center;
+    padding: 15px 0;
+    background-color: #2c3e50; 
+    color: #fff;               
+    font-weight: 600;
+    font-size: 14px;
+    width: 100%;
+}
+
+    </style>
+</head>
+<body>
+    <h1>🚦 Traffic Prediction Dashboard</h1>
+
+{% set models = [
+    {"id":"model1","title":"Model 1: Traffic Volume <br> (Independent of 'Congestion Level', 'Average Speed')"},
+    {"id":"model2","title":"Model 2: Congestion Level <br> (Independent of 'Traffic Volume', 'Average Speed')"},
+    {"id":"model3","title":"Model 3: Average Speed <br> (Independent of 'Traffic Volume', 'Congestion Level')"},
+    {"id":"model4","title":"Model 4: Traffic Volume <br> (With Congestion & Avg Speed)"}
+] %}
+
+
+
+    <div class="containers-wrapper">
+    {% for model in models %}
+    <div class="container" id="{{ model.id }}">
+        <h2>{{ model.title | safe }}</h2>
+        <form>
+            <!-- Categorical features as dropdowns -->
+            <div class="row">
+                <label>Area Name:</label>
+                <select name="Area Name">
+                    <option value="0">0 — Electronic City</option>
+                    <option value="1">1 — Hebbal</option>
+                    <option value="2">2 — Indiranagar</option>
+                    <option value="3">3 — Jayanagar</option>
+                    <option value="4">4 — Koramangala</option>
+                    <option value="5">5 — M.G. Road</option>
+                    <option value="6">6 — Whitefield</option>
+                    <option value="7">7 — Yeshwanthpur</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <label>Road/Intersection Name:</label>
+                <select name="Road/Intersection Name">
+                    <option value="0">0 — 100 Feet Road</option>
+                    <option value="1">1 — Anil Kumble Circle</option>
+                    <option value="2">2 — Ballari Road</option>
+                    <option value="3">3 — CMH Road</option>
+                    <option value="4">4 — Hebbal Flyover</option>
+                    <option value="5">5 — Hosur Road</option>
+                    <option value="6">6 — ITPL Main Road</option>
+                    <option value="7">7 — Jayanagar 4th Block</option>
+                    <option value="8">8 — Marathahalli Bridge</option>
+                    <option value="9">9 — Sarjapur Road</option>
+                    <option value="10">10 — Silk Board Junction</option>
+                    <option value="11">11 — Sony World Junction</option>
+                    <option value="12">12 — South End Circle</option>
+                    <option value="13">13 — Trinity Circle</option>
+                    <option value="14">14 — Tumkur Road</option>
+                    <option value="15">15 — Yeshwanthpur Circle</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <label>Weather Conditions:</label>
+                <select name="Weather Conditions">
+                    <option value="0">0 — Clear</option>
+                    <option value="1">1 — Fog</option>
+                    <option value="2">2 — Overcast</option>
+                    <option value="3">3 — Rain</option>
+                    <option value="4">4 — Windy</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <label>Roadwork and Construction Activity:</label>
+                <select name="Roadwork and Construction Activity">
+                    <option value="0">0 — No</option>
+                    <option value="1">1 — Yes</option>
+                </select>
+            </div>
+
+            <!-- Numeric features -->
+            {% for f in features if f not in ["Area Name","Road/Intersection Name","Weather Conditions","Roadwork and Construction Activity"] %}
+            <div class="row">
+                <label>{{ f }}:</label>
+                <input type="number" step="any" name="{{ f }}">
+            </div>
+            {% endfor %}
+
+            <!-- Extra fields for Model 4 -->
+            {% if model.id == "model4" %}
+            <div class="row">
+                <label>Congestion Level:</label>
+                <input type="number" step="any" name="Congestion Level">
+            </div>
+            <div class="row">
+                <label>Average Speed:</label>
+                <input type="number" step="any" name="Average Speed">
+            </div>
+            {% endif %}
+
+            <button type="button" class="btn predict-btn" data-model="{{ model.id }}">Predict</button>
+            <button type="button" class="btn clear-btn">Clear</button>
+            <button type="button" class="btn example-btn" data-example="1">Example 1</button>
+            <button type="button" class="btn example-btn" data-example="2">Example 2</button>
+        </form>
+
+        <div class="result"></div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+$(document).ready(function(){
+    // Predict button
+    $(".predict-btn").click(function(){
+        let container = $(this).closest(".container");
+        let form = container.find("form");
+        $.post("/predict/" + $(this).data("model"), form.serialize(), function(data){
+            container.find(".result").css("color","green").text(data.label + ": " + data.prediction);
+        });
+    });
+
+    // Clear button
+    $(".clear-btn").click(function(){
+        let container = $(this).closest(".container");
+        container.find("input").val("");
+        container.find("select").val("0");
+        container.find(".result").text("");
+    });
+
+    // Example buttons
+    $(".example-btn").click(function(){
+        let container = $(this).closest(".container");
+        let ex = $(this).data("example");
+        let id = container.attr("id");
+
+        // Example data: full for model4, partial for others
+        let examples = {
+            model1: [
+                {"Area Name":2,"Road/Intersection Name":0,"Travel Time Index":1.5,"Road Capacity Utilization":100,"Incident Reports":0,"Environmental Impact":150,"Public Transport Usage":70,"Traffic Signal Compliance":85,"Parking Usage":85,"Pedestrian and Cyclist Count":111,"Weather Conditions":0,"Roadwork and Construction Activity":0,"Year":2022,"Month":1,"Day":1,"DayOfWeek":5},
+                {"Area Name":6,"Road/Intersection Name":8,"Travel Time Index":1.0,"Road Capacity Utilization":36,"Incident Reports":0,"Environmental Impact":65,"Public Transport Usage":45,"Traffic Signal Compliance":61,"Parking Usage":95,"Pedestrian and Cyclist Count":189,"Weather Conditions":0,"Roadwork and Construction Activity":0,"Year":2022,"Month":2,"Day":10,"DayOfWeek":3}
+            ],
+            model2: [
+                {"Area Name":4,"Road/Intersection Name":9,"Travel Time Index":1.4,"Road Capacity Utilization":90,"Incident Reports":1,"Environmental Impact":160,"Public Transport Usage":50,"Traffic Signal Compliance":80,"Parking Usage":70,"Pedestrian and Cyclist Count":120,"Weather Conditions":1,"Roadwork and Construction Activity":0,"Year":2022,"Month":3,"Day":15,"DayOfWeek":2},
+                {"Area Name":1,"Road/Intersection Name":2,"Travel Time Index":1.2,"Road Capacity Utilization":75,"Incident Reports":0,"Environmental Impact":90,"Public Transport Usage":60,"Traffic Signal Compliance":88,"Parking Usage":78,"Pedestrian and Cyclist Count":140,"Weather Conditions":0,"Roadwork and Construction Activity":1,"Year":2022,"Month":4,"Day":20,"DayOfWeek":6}
+            ],
+            model3: [
+                {"Area Name":7,"Road/Intersection Name":5,"Travel Time Index":1.3,"Road Capacity Utilization":80,"Incident Reports":0,"Environmental Impact":120,"Public Transport Usage":65,"Traffic Signal Compliance":89,"Parking Usage":92,"Pedestrian and Cyclist Count":160,"Weather Conditions":1,"Roadwork and Construction Activity":0,"Year":2022,"Month":5,"Day":12,"DayOfWeek":4},
+                {"Area Name":3,"Road/Intersection Name":7,"Travel Time Index":1.1,"Road Capacity Utilization":60,"Incident Reports":2,"Environmental Impact":110,"Public Transport Usage":55,"Traffic Signal Compliance":77,"Parking Usage":82,"Pedestrian and Cyclist Count":95,"Weather Conditions":0,"Roadwork and Construction Activity":1,"Year":2022,"Month":6,"Day":25,"DayOfWeek":0}
+            ],
+            model4: [
+                {"Area Name":5,"Road/Intersection Name":6,"Travel Time Index":1.5,"Road Capacity Utilization":95,"Incident Reports":1,"Environmental Impact":140,"Public Transport Usage":68,"Traffic Signal Compliance":84,"Parking Usage":90,"Pedestrian and Cyclist Count":180,"Weather Conditions":0,"Roadwork and Construction Activity":0,"Year":2022,"Month":7,"Day":5,"DayOfWeek":1,"Congestion Level":100,"Average Speed":30},
+                {"Area Name":0,"Road/Intersection Name":4,"Travel Time Index":1.0,"Road Capacity Utilization":50,"Incident Reports":0,"Environmental Impact":100,"Public Transport Usage":40,"Traffic Signal Compliance":70,"Parking Usage":65,"Pedestrian and Cyclist Count":130,"Weather Conditions":1,"Roadwork and Construction Activity":1,"Year":2022,"Month":8,"Day":18,"DayOfWeek":5,"Congestion Level":60,"Average Speed":55}
+            ]
+        };
+
+        let data = examples[id][ex - 1];
+        for (const [k, v] of Object.entries(data)) {
+            let field = container.find(`input[name='${k}'], select[name='${k}']`);
+            if (field.length) field.val(v);
+        }
+    });
+});
+</script>
+</body>
+<footer>Designed and Developed by MDZ - SEDTA</footer>
+</html>

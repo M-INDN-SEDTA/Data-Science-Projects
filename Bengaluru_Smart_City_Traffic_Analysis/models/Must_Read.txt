@@ -1,0 +1,9 @@
+* Please run the 
+``` 
+Bengaluru_Smart_City_Traffic_Analysis.ipynb or Bengaluru_Smart_City_Traffic_Analysis.py
+```
+files to generate the `models` folder and save all the models inside it:
+
+> **Important:** Without the `models` folder, the app will not run.
+> Some of the model files exceed GitHub's 100 MB file size limit.
+> You can alternatively download the models directly from Google Drive using this link: \[Link will be provided Shortly]
