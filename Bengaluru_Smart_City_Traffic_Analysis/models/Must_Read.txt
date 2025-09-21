@@ -1,6 +1,6 @@
 * Please run the 
 ``` 
-Bengaluru_Smart_City_Traffic_Analysis.ipynb or Bengaluru_Smart_City_Traffic_Analysis.py
+Bengaluru Smart City Traffic Analysis.ipynb or Bengaluru Smart City Traffic Analysis.py
 ```
 files to generate the `models` folder and save all the models inside it:
 
