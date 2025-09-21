@@ -146,8 +146,8 @@ The goal of this project is to **predict traffic patterns** (volume, congestion,
 Please run the following files to generate the `models` folder and save all the models inside it:
 
 ```
-Bengaluru_Smart_City_Traffic_Analysis.ipynb
-Bengaluru_Smart_City_Traffic_Analysis.py
+Bengaluru Smart City Traffic Analysis.ipynb
+Bengaluru Smart City Traffic Analysis.py
 ```
 
 > **Important:** Without the `models` folder, the app will not run.
