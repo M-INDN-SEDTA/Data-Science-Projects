@@ -253,7 +253,7 @@ python app.py
 
 ```bash
 # Clone repository
-git clone https://github.com/your-username/Weather_Impact_Prediction.git
+git clone https://github.com/M-INDN-SEDTA/Data-Science-Projects/tree/main/Weather_Impact_Prediction
 
 # Install dependencies
 pip install -r requirements.txt
