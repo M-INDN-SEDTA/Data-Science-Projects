@@ -251,12 +251,12 @@ python app.py
 
 ### 12. **Installation & Usage**
 
+> Clone repository
 ```bash
-# Clone repository
 git clone https://github.com/M-INDN-SEDTA/Data-Science-Projects/tree/main/Weather_Impact_Prediction
 ```
+> Install dependencies
 ```bash
-# Install dependencies
 pip install -r requirements.txt
 ```
 # Run Jupyter notebooks or Flask app
