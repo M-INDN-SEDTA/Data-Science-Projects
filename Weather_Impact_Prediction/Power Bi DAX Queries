@@ -1,0 +1,14 @@
+DayOfWeekName =
+SWITCH(
+    TRUE(),
+    weather_data[DayOfWeek] = 0, "Sunday",
+    weather_data[DayOfWeek] = 1, "Monday",
+    weather_data[DayOfWeek] = 2, "Tuesday",
+    weather_data[DayOfWeek] = 3, "Wednesday",
+    weather_data[DayOfWeek] = 4, "Thursday",
+    weather_data[DayOfWeek] = 5, "Friday",
+    weather_data[DayOfWeek] = 6, "Saturday",
+    "Unknown"
+)
+
+

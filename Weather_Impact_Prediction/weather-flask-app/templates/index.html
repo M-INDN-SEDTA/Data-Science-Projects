@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Interactive Weather Map</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    .navbar {
+      background: #333;
+      color: white;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .navbar a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    .navbar a:hover {
+      text-decoration: underline;
+    }
+
+    #map {
+      height: calc(100% - 200px);
+      width: 100%;
+    }
+
+    #info {
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      z-index: 1000;
+      min-width: 240px;
+    }
+
+    #weather-data {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px;
+      font-size: 14px;
+      padding: 5px;
+      background: linear-gradient(135deg, #f0f8ff, #e0f7fa);
+    }
+
+    .weather-col {
+      flex: 1 1 200px;
+      background: linear-gradient(145deg, #ffffff, #f1f1f1);
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      text-align: center;
+      min-width: 150px;
+      max-width: 250px;
+    }
+
+    .weather-col strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 1.1em;
+      color: #333;
+    }
+
+    .footer {
+      background: #333;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+
+    button {
+      padding: 8px 15px;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #00f2fe, #4facfe);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div><strong>Weather Map App</strong></div>
+    <div><a href="#">Home</a><a href="#">About</a><a href="#">Next</a></div>
+  </div>
+
+  <div id="info">
+    Click on map or search to see location details...
+    <br><button id="weather-btn">Get Weather</button>
+  </div>
+
+  <div id="map"></div>
+  <div id="weather-data"></div>
+  <div class="footer">© 2025 Weather Map App</div>
+
+  <script>
+    let currentLat = null;
+    let currentLon = null;
+
+    var map = L.map('map').setView([20, 78], 4);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+      maxZoom: 19, 
+      attribution: '© OpenStreetMap contributors' 
+    }).addTo(map);
+
+    var geocoder = L.Control.geocoder({ defaultMarkGeocode: true }).addTo(map);
+    var currentMarker = null;
+
+    function fetchLocation(lat, lon) {
+      currentLat = lat;
+      currentLon = lon;
+      fetch("/api/reverse-geocode", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lat, lon })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("info").innerHTML =
+          `<strong>City:</strong> ${data.city} <br>
+           <strong>State:</strong> ${data.state} <br>
+           <strong>Country:</strong> ${data.country} <br>
+           <strong>Latitude:</strong> ${data.latitude} <br>
+           <strong>Longitude:</strong> ${data.longitude} <br>
+           <button id="weather-btn">Get Weather</button>`;
+        document.getElementById("weather-btn").onclick = getWeather;
+      });
+    }
+
+    function getWeather() {
+      if (!currentLat || !currentLon) return;
+      fetch("/api/weather", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lat: currentLat, lon: currentLon })
+      })
+      .then(res => res.json())
+      .then(data => {
+        let html = "";
+        html += `<div class="weather-col">
+                   <strong>Actual Temperature (°C)</strong>
+                   ${parseFloat(data.actual_temp).toFixed(2)}
+                 </div>`;
+        html += `<div class="weather-col">
+                   <strong>Predicted Temperature (°C)</strong>
+                   ${parseFloat(data.predicted_temp).toFixed(2)}
+                 </div>`;
+        for (let key in data) {
+          if (key !== "actual_temp" && key !== "predicted_temp") {
+            html += `<div class="weather-col">
+                       <strong>${key}</strong>
+                       ${parseFloat(data[key]).toFixed(2)}
+                     </div>`;
+          }
+        }
+        document.getElementById("weather-data").innerHTML = html;
+      });
+    }
+
+    map.on('click', function(e) {
+      if (currentMarker) map.removeLayer(currentMarker);
+      currentMarker = L.marker(e.latlng).addTo(map);
+      currentMarker.bindPopup("Clicked at:<br>" + e.latlng.lat.toFixed(5) + ", " + e.latlng.lng.toFixed(5)).openPopup();
+      fetchLocation(e.latlng.lat, e.latlng.lng);
+    });
+
+    geocoder.on('markgeocode', function(e) {
+      const latlng = e.geocode.center;
+      if (currentMarker) map.removeLayer(currentMarker);
+      currentMarker = L.marker(latlng).addTo(map);
+      currentMarker.bindPopup(`Search result:<br>${e.geocode.name}<br>${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)}`).openPopup();
+      map.setView(latlng, 12);
+      fetchLocation(latlng.lat, latlng.lng);
+    });
+  </script>
+</body>
+</html>

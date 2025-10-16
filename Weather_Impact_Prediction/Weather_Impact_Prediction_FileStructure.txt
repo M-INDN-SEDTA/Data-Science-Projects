@@ -1,0 +1,24 @@
+📂 Weather_Impact_Prediction
+├── datasets
+│   ├── weather_numeric_features.csv
+│   └── weatherHistory.csv
+├── models
+│   └── weather_temp_model.pkl
+├── weather-flask-app
+│   ├── models
+│   │   └── weather_temp_model.pkl
+│   ├── templates
+│   │   └── index.html
+│   ├── app.py
+│   └── requirements.txt
+├── Power Bi DAX Queries
+├── Weather Data to SQL DB.ipynb
+├── Weather Impact Analysis Dashboard.pbix
+├── Weather Impact Analysis Dashboard.pdf
+├── Weather Impact Analysis Report.pdf
+├── Weather Impact Analysis SQL Queries.sql
+├── Weather_Impact_Analysis_and_Prediction.ipynb
+├── Weather_Impact_Analysis_and_Prediction.py
+└── Weather_Impact_Prediction.ipynb
+└── requirements.txt
+└── README.md
